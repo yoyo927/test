@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Console;
-
+use DB;;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        //  
+        Commands\DeleteChartRecords::class,
     ];
 
     /**
@@ -25,6 +26,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        //注意時區配置 app\config\app.php
+        //在windows要去公作排程設定
+
+        
+        $schedule->command('DeleteChartRecords:name')->everyFiveMinutes();
     }
 
     /**

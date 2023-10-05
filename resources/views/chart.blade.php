@@ -11,12 +11,7 @@
 
         <!-- Styles -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css"></script>
+       
         
        
         
@@ -37,7 +32,8 @@
             .flex-center {
                 align-items: center;
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
+                /* justify-content: center; */
             }
 
             .position-ref {
@@ -89,20 +85,31 @@
                 </div>
             @endif
 
-            <div class="content">
+            <div class="content">   
                 <div class="title m-b-md">
                     Laravel
                 </div>
 
                 <div>
                     <canvas id="myChart" width="600" height="600"></canvas>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css"></script>
                     <script>
+                    const initialData = {
+                            labels: ['2023-10-06 00:05:49', '2023-10-06 00:05:50', '2023-10-06 00:05:51','2023-10-06 00:05:52','2023-10-06 00:05:53','2023-10-06 00:05:54','2023-10-06 00:05:55','2023-10-06 00:05:56','2023-10-06 00:05:57','2023-10-06 00:05:58'],
+                            data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],};
                     var ctx = document.getElementById('myChart').getContext('2d');
                     var myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
+                            labels: initialData.labels,
                             datasets: [{
                                 label: '圖表',
+                                data: initialData.data,
                                 borderWidth: 1
                             }]
                         },
@@ -125,19 +132,91 @@
                             }
                         }
                     });
+                    
+                    
+
 
                     let evtSource = new EventSource("/chartEventStream", {withCredentials: true});
                         evtSource.onmessage = function (e) {
                             let serverData = JSON.parse(e.data);
                             console.log('EventData:- ', serverData);
 
+
                             myChart.data.labels.push(serverData.time);
                             myChart.data.datasets[0].data.push(serverData.value);
+
+                            // 移除舊的數據，保持一個固定的數據點數目
+                            if (myChart.data.labels.length > 10) {
+                                myChart.data.labels.shift();
+                                myChart.data.datasets[0].data.shift();
+                            }
+
                             myChart.update();
+                            
                     };
                     </script>
                 </div>
+                
             </div>
+            <div class="content">
+                <div class="title m-b-md">
+                    折線圖
+                </div>
+                <div>
+                    <canvas id="myChart_1" width="600" height="600"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                    const ctx_1 = document.getElementById("myChart_1").getContext("2d");
+                    const myChart_1 = new Chart(ctx_1, {
+                        type: "line",
+                        data: {
+                            labels: ['一月份', '二月份', '三月份','四月份', '五月份', '六月份', '七月份'],
+                            datasets: 
+                                    [
+                                        {   
+                                        label: "平均氣溫",
+                                        data: [19, 21, 23, 26, 28, 29, 30],
+                                        fill: false,
+                                        borderColor: 'rgb(54, 162, 235)', // 線的顏色
+                                        backgroundColor: ['rgba(255, 99, 132, 0.5)'],// 點的顏色
+                                        pointStyle: 'circle',     //點類型為圓點
+                                        pointRadius: 6,    //圓點半徑
+                                        pointHoverRadius: 10, //滑鼠動上去後圓點半徑
+                                        tension: 0.1
+                                        }
+                                        
+                                    ]
+                        },
+                        options: {
+                            responsive: true,  // 設置圖表為響應式
+
+                            interaction: {  
+                                            intersect: false,
+                                        },
+                            scales: {  
+                            x: {
+                                display: true,
+                                title: {
+                                        display: true,
+                                        text: '月份'
+                                        }
+                                },
+                            y: {
+                                display: true,
+                                title: {
+                                        display: true,
+                                        text: '氣溫'
+                                        }
+                                }
+                            }
+
+                        }
+                    });
+                    </script>
+                </div>
+            </div>
+           
         </div>
+                    
     </body>
 </html>
