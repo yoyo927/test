@@ -152,8 +152,8 @@ data: {
 可以手動測試一下能不能執行，成功的話資料表會清空
 ```
  php artisan DeleteChartRecords:name
-
- php artisan schedule:list //可以查看工作排程跟下次執行的時間
+ php artisan schedule:run 執行一次測試能不能順利刪除
+ php artisan schedule:list //可以查看工作排程跟下次執行的時間 * 如果有錯誤也沒關係
 ```
 因為在windows所以要再另外設定排程
 打開搜尋->工作排程器 打開後點建立工作命名它
