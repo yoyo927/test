@@ -25,10 +25,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        //注意時區配置 app\config\app.php
-        //在windows要去公作排程設定
-
+        /** $schedule->command('inspire')->hourly();
+        *注意時區配置 app\config\app.php
+        *在Linux上可以執行 php /path/to/artisan schedule:run 1>> /dev/null 2>&1 向伺服器的Crontab檔案新增一個記錄
+        *在windows要去公作排程設定
+        */
         
         $schedule->command('DeleteChartRecords:name')->everyFiveMinutes();
     }
