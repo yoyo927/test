@@ -170,4 +170,4 @@ data: {
 ```
 C:\Users\wonengjinma\blog\artisan schedule:run
 ```
-設定成功後每次執行cmd會跳出來再關掉
+設定成功後每次執行cmd會跳出來再關掉。
